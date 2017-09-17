@@ -57,6 +57,9 @@ public class GameController : MonoBehaviour {
 		if (!isfirstflag) {
 			titleUI.SetActive (true);
 			isStageClear = new bool[stages.Length];
+			for (int i = 0; isStageClear.Length > i; i++) {
+				isStageClear [i] = true;
+			}
 			isfirstflag = true;
 		}
 		//clearText = clearUI.transform.GetChild(1).GetComponent<Text>();
@@ -165,13 +168,13 @@ public class GameController : MonoBehaviour {
 				isStageClear [nowStageNum-1] = true;
 			}
 			//isStageClear配列の中のtrueの数をカウントして、clearStageNumに入れる
-			int sum = 0;
-			for (int i = 0; isStageClear.Length > i; i++) {
-				if (isStageClear [i] == true) {
-					sum++;
-				}
-			}
-			clearStageNum = sum;
+//			int sum = 0;
+//			for (int i = 0; isStageClear.Length > i; i++) {
+//				if (isStageClear [i] == true) {
+//					sum++;
+//				}
+//			}
+			//clearStageNum = sum;
 
 			timeTextUI.SetActive (true);
 			timeTextUI.GetComponent<Text> ().text = "タイム : " + clearTime.ToString ("F1");

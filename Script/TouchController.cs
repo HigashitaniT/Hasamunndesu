@@ -6,6 +6,8 @@ public class TouchController : MonoBehaviour {
 
 	Ray ray;
 
+	GameObject hitObj;
+
 	// Use this for initialization
 	void Start () {
 		
@@ -22,25 +24,25 @@ public class TouchController : MonoBehaviour {
 	bool OnTouchDown()
 	{
 		// タッチされているとき
-		if (0 < Input.touchCount)
-		{
+		if (0 < Input.touchCount) {
 			// タッチされている指の数だけ処理
-			for (int i = 0; i < 1; i++)
-			{
+			for (int i = 0; i < 1; i++) {
 				// タッチ情報をコピー
-				Touch t = Input.GetTouch(i);
+				Touch t = Input.GetTouch (i);
 				// タッチしたときかどうか
-				if (t.phase == TouchPhase.Began)
-				{
-					ray = Camera.main.ScreenPointToRay(t.position);
-					return RayChack();
+				if (t.phase == TouchPhase.Began) {
+					ray = Camera.main.ScreenPointToRay (t.position);
+					return RayChack ();
 				}
 				if (t.phase == TouchPhase.Ended) {
 					ray = Camera.main.ScreenPointToRay (t.position);
 					return EndRay ();
 				}
 			}
+		} else {
+		
 		}
+
 		if (Input.GetMouseButtonDown(0))//クリックしたとき
 		{
 //			Debug.Log ("kurikku");
@@ -63,12 +65,14 @@ public class TouchController : MonoBehaviour {
 			//Rayを飛ばしてあたったオブジェクトのタグがGoalBlockだったら
 			if (hit.collider.gameObject == (hit.collider.gameObject.tag == "GoalBlock"))
 			{
-				hit.collider.gameObject.GetComponent<GoalBlockManager> ().MyTouch ();
+				hitObj = hit.collider.gameObject;
+				hitObj.GetComponent<GoalBlockManager> ().MyTouch ();
 				return true;
 			}
 			if (hit.collider.gameObject.tag == "TouchObject") 
 			{
-				hit.collider.gameObject.GetComponent<TouchObject> ().MyTouch ();
+				hitObj = hit.collider.gameObject;
+				hitObj.GetComponent<TouchObject> ().MyTouch ();
 				return true;
 			}
 		}
@@ -76,22 +80,34 @@ public class TouchController : MonoBehaviour {
 	}
 	bool EndRay()
 	{
-		RaycastHit hit = new RaycastHit();
-		if (Physics.Raycast(ray, out hit))
-		{
-			//Rayを飛ばしてあたったオブジェクトのタグがGoalBlockだったら
-			if (hit.collider.gameObject == (hit.collider.gameObject.tag == "GoalBlock"))
-			{
-				hit.collider.gameObject.GetComponent<GoalBlockManager> ().MyTouchEnd ();
-				return true;
+		if (hitObj != null) {
+			if (hitObj.GetComponent<TouchObject> ()) {
+				hitObj.GetComponent<TouchObject> ().MyTouchEnd ();
+			} else if(hitObj.GetComponent<GoalBlockManager>()){
+				hitObj.GetComponent<GoalBlockManager> ().MyTouchEnd ();
 			}
-			if (hit.collider.gameObject.tag == "TouchObject") 
-			{
-				hit.collider.gameObject.GetComponent<TouchObject> ().MyTouchEnd ();
-				return true;
-			}
+			hitObj = null;
+			return true;
 		}
-		return false;//タッチされてなかったらfalse
+		return false;
+//
+//		RaycastHit hit = new RaycastHit();
+//		if (Physics.Raycast(ray, out hit))
+//		{
+//			//Rayを飛ばしてあたったオブジェクトのタグがGoalBlockだったら
+//			if (hit.collider.gameObject == (hit.collider.gameObject.tag == "GoalBlock"))
+//			{
+//				hit.collider.gameObject.GetComponent<GoalBlockManager> ().MyTouchEnd ();
+//				return true;
+//			}
+//			if (hit.collider.gameObject.tag == "TouchObject") 
+//			{
+//				hit.collider.gameObject.GetComponent<TouchObject> ().MyTouchEnd ();
+//				return true;
+//			}
+//		}
+//		return false;//タッチされてなかったらfalse
+
 	}
 
 

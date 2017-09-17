@@ -28,9 +28,9 @@ public class GoalBlockMarker : MonoBehaviour {
 	void Awake () {
 		GameObject instanceGoalBlock;
 		if (isStatic) {
-			instanceGoalBlock = Instantiate (goalBlock, transform.position, new Quaternion (0, -180, 0, 0));
-		} else {
 			instanceGoalBlock = Instantiate (goalBlock, transform.position, Quaternion.identity);
+		} else {
+			instanceGoalBlock = Instantiate (goalBlock, transform.position, new Quaternion (0, -180, 0, 0));
 		}
 		instanceGoalBlock.GetComponent<GoalBlockScript> ().MarkSetter (isStatic, (int)mark);
 		this.gameObject.SetActive (false);
@@ -46,10 +46,13 @@ public class GoalBlockMarker : MonoBehaviour {
 		Gizmos.color = new Color (0, 1, 0, 0.5f);
 		Gizmos.DrawSphere (transform.position, 1f);
 
+		int sum = (int)mark;
+
+		if (isStatic) sum++;
 
 		Gizmos.DrawIcon (
 			transform.position, 
-			MarksSet.Instance.MarkGetter () [(int)mark].markSprite.name,
+			MarksSet.Instance.MarkGetter () [sum].markSprite.name,
 			true
 		);
 	}
